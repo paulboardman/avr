@@ -1,0 +1,31 @@
+#summary overview of the firefly code and the evolution of the project.
+
+= Introduction =
+
+The "Jar o' Fireflies" seems to be a classic introduction to microcontrollers (uC).  I wanted to make one before I knew how to solder.  So, it's natural that this is one of my rougher projects (so far).
+
+= Mark I =
+
+My [http://www.fangletronics.com/2009/05/jar-o-fireflies.html first attempt] was flawed in many ways (but I'd only just started to learn about uCs).  I used an ATtiny13 (because that's what I had on hand) and researched software PWM.  The uC frequency was set at default (1MHz) because I didn't know how to modify it at the time (or that you could).  This meant that there was a distinct flicker during the pulse cycles (on and off) for the LEDs.
+
+The shrinkydink idea was good though (my wife's idea and implementation).
+
+== Solar version ==
+
+http://www.fangletronics.com/2009/06/solar-powered-fireflies.html
+
+This just took the guts of a solar light (guts purchased from http://www.allelectronics.com) and used these as the power source for the fireflies.  The circuit charges during the day and discharges at night, so the fireflies come out at night.
+
+= Mark II =
+
+http://www.fangletronics.com/2010/02/jar-o-fireflies-mark-ii.html
+
+This was done almost a year later.  I wanted to revisit the idea and do it properly.  I made this one battery powered (coin cell) so that it could be used as a night light in my kids room.
+
+The code implements software PWM as described by the ATMEL technote [http://www.atmel.com/dyn/resources/prod_documents/doc8020.pdf "Low-Jitter Multi Channel Software PWM".
+
+= Future = 
+
+ * SMD LEDs version.
+ * more natural firefly simulation
+ * store random seed in EEPROM to alter behaviour from one use to the next (though the kids might like the regularity of the current behaviour).

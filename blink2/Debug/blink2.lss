@@ -1,0 +1,77 @@
+
+blink2.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000003e  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .stab         0000036c  00000000  00000000  00000094  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  2 .stabstr      000006be  00000000  00000000  00000400  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	09 c0       	rjmp	.+18     	; 0x14 <__ctors_end>
+   2:	0e c0       	rjmp	.+28     	; 0x20 <__bad_interrupt>
+   4:	0d c0       	rjmp	.+26     	; 0x20 <__bad_interrupt>
+   6:	0c c0       	rjmp	.+24     	; 0x20 <__bad_interrupt>
+   8:	0b c0       	rjmp	.+22     	; 0x20 <__bad_interrupt>
+   a:	0a c0       	rjmp	.+20     	; 0x20 <__bad_interrupt>
+   c:	09 c0       	rjmp	.+18     	; 0x20 <__bad_interrupt>
+   e:	08 c0       	rjmp	.+16     	; 0x20 <__bad_interrupt>
+  10:	07 c0       	rjmp	.+14     	; 0x20 <__bad_interrupt>
+  12:	06 c0       	rjmp	.+12     	; 0x20 <__bad_interrupt>
+
+00000014 <__ctors_end>:
+  14:	11 24       	eor	r1, r1
+  16:	1f be       	out	0x3f, r1	; 63
+  18:	cf e9       	ldi	r28, 0x9F	; 159
+  1a:	cd bf       	out	0x3d, r28	; 61
+  1c:	02 d0       	rcall	.+4      	; 0x22 <main>
+  1e:	0d c0       	rjmp	.+26     	; 0x3a <_exit>
+
+00000020 <__bad_interrupt>:
+  20:	ef cf       	rjmp	.-34     	; 0x0 <__vectors>
+
+00000022 <main>:
+//LED is wired into pin 7 (PB2)
+#define LED PB2
+
+int main(void){
+	//set data direction register for pin 7 to output
+	DDRB |= _BV(DDB2);
+  22:	ba 9a       	sbi	0x17, 2	; 23
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+  24:	24 e2       	ldi	r18, 0x24	; 36
+  26:	34 ef       	ldi	r19, 0xF4	; 244
+
+	//infinite loop
+	while (1) {
+		//turn on the LED
+		PORTB |= _BV(LED);
+  28:	c2 9a       	sbi	0x18, 2	; 24
+  2a:	c9 01       	movw	r24, r18
+  2c:	01 97       	sbiw	r24, 0x01	; 1
+  2e:	f1 f7       	brne	.-4      	; 0x2c <main+0xa>
+		//wait for 1/4 of a second
+		_delay_ms(250);
+		//turn off the LED
+		PORTB &= ~_BV(LED);
+  30:	c2 98       	cbi	0x18, 2	; 24
+  32:	c9 01       	movw	r24, r18
+  34:	01 97       	sbiw	r24, 0x01	; 1
+  36:	f1 f7       	brne	.-4      	; 0x34 <__CCP__>
+  38:	f7 cf       	rjmp	.-18     	; 0x28 <main+0x6>
+
+0000003a <_exit>:
+  3a:	f8 94       	cli
+
+0000003c <__stop_program>:
+  3c:	ff cf       	rjmp	.-2      	; 0x3c <__stop_program>
